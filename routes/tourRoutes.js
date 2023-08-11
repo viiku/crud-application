@@ -11,10 +11,7 @@ const router = express.Router();
 // app.delete('/api/v1/tours/:id', deleteTour);
 // app.get('/api/v1/tours/:id', getTour);
 
-router.param('id', (req, res, next, val) => {
-    console.log(`Tour id is ${val}`);
-    next();
-});
+router.param('id', tourController.checkID);
 
 router
     .route('/')
