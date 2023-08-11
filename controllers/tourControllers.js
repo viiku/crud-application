@@ -1,6 +1,7 @@
 const fs = require('fs');
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`));
 
+// checking ID in middleware itself so it doesn't hit the endpoint
 exports.checkID = (req, res, next, val) => {
     console.log(`Tour id is ${val}`);
     if (req.params.id * 1 > tours.length) {
@@ -8,6 +9,17 @@ exports.checkID = (req, res, next, val) => {
             status: 'fail',
             message: 'Invalid ID'
         });       
+    }
+    next();
+}
+
+exports.checkTourData = (req, res, next) => {
+    console.log(JSON.stringify(req.body));
+    if (!req.body.name || !req.body.price) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Bad request, Invalid tour body!!'
+        });
     }
     next();
 }
